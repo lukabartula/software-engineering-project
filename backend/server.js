@@ -1,8 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const authRoutes = require('./routes/authRoutes');
-const db = require('./database/db');
+const userRoutes = require('./routes/userRoutes');
+const recipeRoutes = require('./routes/recipeRoutes');
 
 dotenv.config();
 
@@ -14,7 +14,8 @@ app.use(express.json());
 
 
 // Routes
-app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/recipes', recipeRoutes);
 
 app.get('/', (req, res) => {
   res.send('Server is running...');
