@@ -1,8 +1,9 @@
 const jwt = require('jsonwebtoken');
-require('dotenv').config;
+require('dotenv').config();
 
 const verifyToken = (req, res, next) => {
-    const token = req.header('Authorization');
+    const authHeader = req.header('Authorization');
+    const token = authHeader && authHeader.split(' ')[1];
   
     if (!token) {
       return res.status(403).json({ message: 'Access denied. No token provided.' });
@@ -12,6 +13,7 @@ const verifyToken = (req, res, next) => {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       req.user = {
         userId: decoded.userId,
+        username: decoded.username,
         role: decoded.role
       };
       next();
