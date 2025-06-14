@@ -4,6 +4,9 @@ import { AuthProvider } from './components/Auth/AuthContext';
 import Login from './components/Auth/Login';
 import Signup from './components/Auth/Signup';
 import ProtectedRoute from './components/Auth/ProtectedRoute';
+import Layout from './components/Layout';
+import Profile from './pages/Profile';
+
 
 const App = () => {
   return (
@@ -12,6 +15,11 @@ const App = () => {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Signup />} />
+          <Route path="profile" element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            } />
 
         </Routes>
       </Router>
