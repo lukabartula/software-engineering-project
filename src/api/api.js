@@ -4,6 +4,24 @@ const API = axios.create({
   baseURL: 'http://localhost:5000/api',
 });
 
+// Log every request URL and method
+API.interceptors.request.use((config) => {
+  console.log(`[API REQUEST] ${config.method?.toUpperCase()} ${config.baseURL}${config.url}`);
+  return config;
+}, (error) => {
+  console.error('[API REQUEST ERROR]', error);
+  return Promise.reject(error);
+});
+
+// Log every response and error
+API.interceptors.response.use((response) => {
+  console.log('[API RESPONSE]', response);
+  return response;
+}, (error) => {
+  console.error('[API ERROR]', error);
+  return Promise.reject(error);
+});
+
 // Automatically attach token to requests
 export const setAuthToken = (token) => {
   if (token) {

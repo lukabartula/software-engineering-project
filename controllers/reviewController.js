@@ -146,25 +146,24 @@ const getAverageRating = async (req, res) => {
   const recipeIdInt = parseInt(recipeId);
   try {
     const result = await db.query(
-      'SELECT AVG(rating)::numeric(10,2) AS average_rating FROM reviews WHERE recipe_id = $1',
+      "SELECT AVG(rating)::numeric(10,2) AS average_rating FROM reviews WHERE recipe_id = $1",
       [recipeIdInt]
     );
-
-
 
     const averageRating = result.rows[0].average_rating || 0;
     res.status(200).json({ average_rating: parseFloat(averageRating) });
   } catch (err) {
-    console.error('Error calculating average rating:', err.message);
-    res.status(500).json({ message: 'Server error while calculating average rating.' });
+    console.error("Error calculating average rating:", err.message);
+    res
+      .status(500)
+      .json({ message: "Server error while calculating average rating." });
   }
 };
-
 
 module.exports = {
   addReview,
   getReviewsForRecipe,
   updateReview,
   deleteReview,
-  getAverageRating
+  getAverageRating,
 };

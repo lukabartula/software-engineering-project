@@ -1,25 +1,41 @@
 {
-  "name": "frontend",
-  "version": "0.1.0",
+  "name": "software-engineering-project",
+  "version": "1.0.0",
   "private": true,
+  "description": "Fullstack Dessert Delight App",
+  "author": "",
+  "license": "ISC",
+  "scripts": {
+    "start": "concurrently \"react-scripts start\" \"node server.js\"",
+    "server": "node server.js",
+    "client": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.10.0",
+    "bcryptjs": "^3.0.2",
+    "concurrently": "^9.1.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
+    "pg": "^8.15.6",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.6.2",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
+    "vercel": "^41.0.2",
     "web-vitals": "^2.1.4"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+  "devDependencies": {
+    "nodemon": "^3.1.10"
   },
   "eslintConfig": {
     "extends": [
