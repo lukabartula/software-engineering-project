@@ -91,8 +91,12 @@ const AdminDashboard = () => {
                   <h3>{recipe.title}</h3>
                   {activeTab === 'pending' && (
                     <>
-                      <button onClick={() => handleApprove(recipe.id)}>Approve</button>
-                      <button onClick={() => handleReject(recipe.id)}>Reject</button>
+                      <button onClick={() => handleApprove(recipe.id)} style={{ marginRight: '10px' }}>
+                        Approve
+                      </button>
+                      <button onClick={() => handleReject(recipe.id)}>
+                        Reject
+                      </button>
                     </>
                   )}
                 </li>

@@ -4,7 +4,7 @@ const db = require("../database/db");
 const addReview = async (req, res) => {
   const userId = req.user.userId;
   const recipeId = req.params.recipeId;
-  const { rating, reviewText } = req.body;
+  const { rating, review_text } = req.body;
 
   // Validate rating (1-5)
   if (rating < 1 || rating > 5) {
@@ -26,7 +26,7 @@ const addReview = async (req, res) => {
       VALUES ($1, $2, $3, $4)
       RETURNING *;
     `;
-    const values = [userId, recipeId, rating, reviewText];
+    const values = [userId, recipeId, rating, review_text];
     const { rows } = await db.query(query, values);
 
     res
@@ -65,7 +65,7 @@ const getReviewsForRecipe = async (req, res) => {
 const updateReview = async (req, res) => {
   const userId = req.user.userId;
   const recipeId = req.params.recipeId;
-  const { rating, reviewText } = req.body;
+  const { rating, review_text } = req.body;
 
   // Validate rating
   if (rating < 1 || rating > 5) {
@@ -92,7 +92,7 @@ const updateReview = async (req, res) => {
     `;
     const updatedReview = await db.query(updateQuery, [
       rating,
-      reviewText,
+      review_text,
       rows[0].id,
     ]);
 
