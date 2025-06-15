@@ -17,18 +17,19 @@ const App = () => {
     <AuthProvider>
       <Router>
         <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path="about" element={<About />} />
+            <Route path="recipes" element={<Recipes />} />
+            <Route path="recipes/:id" element={<RecipeDetails />} />
+            <Route path="profile" element={
+              <ProtectedRoute><Profile /></ProtectedRoute>
+            } />
+            {/* More protected routes like create-recipe will go here */}
+          </Route>
+
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Signup />} />
-          <Route path="/recipes" element={<Recipes />} />
-          <Route path="/recipes/:id" element={<RecipeDetails />} />
-          <Route path="profile" element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          } />
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-
         </Routes>
       </Router>
     </AuthProvider>

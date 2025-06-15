@@ -107,6 +107,58 @@ body {
   padding: 10px 40px;
 }
 
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navbar-logo-img {
+  width: 40px;
+  height: 40px;
+}
+
+.navbar-center {
+  display: flex;
+  gap: 25px;
+}
+
+.navbar-center a {
+  text-decoration: none;
+  color: var(--secondary-color);
+  font-weight: 500;
+}
+
+.navbar-center a:hover {
+  text-decoration: underline;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.navbar-right a {
+  text-decoration: none;
+  color: var(--secondary-color);
+  font-weight: 500;
+}
+
+.logout-button {
+  background-color: #d9534f;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: #c9302c;
+}
+
 .navbar-logo {
   display: flex;
   align-items: center;
@@ -383,4 +435,64 @@ body {
 .recipe-section h3 {
   margin-bottom: 10px;
   font-size: 22px;
+}
+
+/* Shared Recipe Card */
+.recipe-card {
+  background-color: var(--secondary-color);
+  border: 1px solid var(--primary-color);
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  overflow: hidden;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+}
+
+.recipe-card:hover {
+  transform: scale(1.03);
+}
+
+.recipe-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.recipe-info {
+  padding: 20px;
+}
+
+.recipe-info h3 {
+  margin-bottom: 10px;
+  font-size: 20px;
+  color: var(--primary-color);
+}
+
+.recipe-info p {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.recipe-button {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.recipe-button:hover {
+  background-color: #3e2a1f;
+}
+
+/* Extra styling for Featured Card */
+.featured-card {
+  border: 2px solid gold;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
 }

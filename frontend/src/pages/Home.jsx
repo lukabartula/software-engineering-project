@@ -1,11 +1,35 @@
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { RecipeCardFactory } from '../components/RecipeCardFactory';
 import '../App.css';
-import RecipeCard from '../components/RecipeCard';
-
 
 const Home = () => {
+  const [featuredRecipes, setFeaturedRecipes] = useState([]);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    const fetchFeatured = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/recipes');
+        const allRecipes = response.data.recipes;
+
+        // Filter recipes by IDs you want as featured
+        const featured = allRecipes.filter(recipe =>
+          [1, 2, 3].includes(recipe.id)
+        );
+
+        setFeaturedRecipes(featured);
+      } catch (err) {
+        console.error(err);
+        setError('Failed to load featured recipes.');
+      }
+    };
+
+    fetchFeatured();
+  }, []);
+
   return (
     <div className="home-container">
-
       <section className="hero-section">
         <div className="hero-content">
           <h1>Welcome to Dessert Delight 🍰</h1>
@@ -14,29 +38,21 @@ const Home = () => {
         </div>
       </section>
 
-    <section className="featured-section">
-    <h2>Featured Recipes</h2>
+      <section className="featured-section">
+        <h2>Featured Recipes</h2>
+        {error && <p className="error-text">{error}</p>}
 
-    <div className="products-grid">
-        <RecipeCard
-        title="Chocolate Lava Cake"
-        description="A rich and gooey chocolate dessert."
-        image_url="https://example.com/lava.jpg"
-        />
-        <RecipeCard
-        title="Vegan Berry Tart"
-        description="A colorful tart with fresh berries."
-        image_url="https://example.com/tart.jpg"
-        />
-        <RecipeCard
-        title="No-Bake Cheesecake"
-        description="Simple cheesecake you can chill instead of bake."
-        image_url="https://example.com/cheesecake.jpg"
-        />
-    </div>
-    </section>
-
-
+        <div className="products-grid">
+          {featuredRecipes.map(recipe =>
+            RecipeCardFactory('featured', {
+              id: recipe.id,
+              title: recipe.title,
+              description: recipe.description,
+              image_url: recipe.image_url
+            })
+          )}
+        </div>
+      </section>
     </div>
   );
 };
