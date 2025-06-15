@@ -12,6 +12,7 @@ import RecipeDetails from './pages/RecipeDetails';
 import AdminRoute from './components/Auth/AdminRoute';
 import AdminDashboard from './pages/AdminDashboard';
 import AddRecipe from './pages/AddRecipe';
+import Favorites from './pages/Favorites';
 
 const App = () => {
   return (
@@ -31,6 +32,9 @@ const App = () => {
             } />
             <Route path="add-recipe" element={
               <ProtectedRoute><AddRecipe /></ProtectedRoute>
+            } />
+            <Route path="favorites" element={
+              <ProtectedRoute><Favorites /></ProtectedRoute>
             } />
             
           </Route>
