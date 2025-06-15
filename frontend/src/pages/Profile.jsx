@@ -4,6 +4,7 @@ import EditProfileModal from '../components/EditProfileModal';
 import ChangePasswordModal from '../components/Auth/ChangePasswordModal';
 import '../App.css';
 import { getUserProfile, deleteUserProfile } from '../api/api';  // <-- central API calls
+import { useNavigate } from 'react-router-dom';  // <-- ADD THIS LINE
 
 const Profile = () => {
   const { user, logout } = useContext(AuthContext);
@@ -13,6 +14,7 @@ const Profile = () => {
   const [deleting, setDeleting] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
 
+  const navigate = useNavigate();  // <-- ADD THIS LINE
 
   const fetchProfile = async () => {
     try {
@@ -38,7 +40,7 @@ const Profile = () => {
       setDeleting(true);
       await deleteUserProfile(user.id);
       alert('Account deleted successfully.');
-      logout();  // logout & clear context
+      logout();
     } catch (err) {
       console.error(err);
       alert('Failed to delete account.');
@@ -70,6 +72,16 @@ const Profile = () => {
       </button>
       <button className="logout-button" onClick={() => setShowPasswordModal(true)}>Change Password</button>     
 
+      {/* Admin Dashboard Button */}
+      {profile.role === 'admin' && (
+        <button 
+          className="logout-button"
+          onClick={() => navigate('/admin')}
+        >
+          Admin Dashboard
+        </button>
+      )}
+
       {showModal && (
         <EditProfileModal
           profile={profile}
@@ -84,7 +96,6 @@ const Profile = () => {
           closeModal={() => setShowPasswordModal(false)} 
         />
       )}
-
     </div>
   );
 };

@@ -1,12 +1,70 @@
 const db = require('../database/db');
 
+// Admin approves a recipe
+const approveRecipe = async (req, res) => {
+  const { id } = req.params;
+  const role = req.user.role;
+
+  if (role !== 'admin') {
+    return res.status(403).json({ message: 'Only admins can approve recipes.' });
+  }
+
+  try {
+    const { rowCount } = await db.query('UPDATE recipes SET status = $1 WHERE id = $2', ['published', id]);
+    if (rowCount === 0) {
+      return res.status(404).json({ message: 'Recipe not found.' });
+    }
+    res.status(200).json({ message: 'Recipe approved successfully.' });
+  } catch (err) {
+    console.error('Error approving recipe:', err.message);
+    res.status(500).json({ message: 'Server error while approving recipe.' });
+  }
+};
+
+// Admin rejects a recipe
+const rejectRecipe = async (req, res) => {
+  const { id } = req.params;
+  const role = req.user.role;
+
+  if (role !== 'admin') {
+    return res.status(403).json({ message: 'Only admins can reject recipes.' });
+  }
+
+  try {
+    const { rowCount } = await db.query('UPDATE recipes SET status = $1 WHERE id = $2', ['rejected', id]);
+    if (rowCount === 0) {
+      return res.status(404).json({ message: 'Recipe not found.' });
+    }
+    res.status(200).json({ message: 'Recipe rejected successfully.' });
+  } catch (err) {
+    console.error('Error rejecting recipe:', err.message);
+    res.status(500).json({ message: 'Server error while rejecting recipe.' });
+  }
+};
+
+// Optional: Get all recipes by status (pending, approved, rejected)
+const getRecipesByStatus = async (req, res) => {
+  const { status } = req.query;
+
+  try {
+    const { rows } = await db.query('SELECT * FROM recipes WHERE status = $1', [status]);
+    res.status(200).json({ recipes: rows });
+  } catch (err) {
+    console.error('Error fetching recipes by status:', err.message);
+    res.status(500).json({ message: 'Server error while fetching recipes.' });
+  }
+};
+
 // Create a new recipe
 const createRecipe = async (req, res) => {
-  const { title, description, category, ingredients, instructions, prep_time, cook_time, image_url, author_id } = req.body;
-
+  const { title, description, category, ingredients, instructions, prep_time, cook_time, image_url } = req.body;
+  const author_id = req.user.userId;
+  console.log('Creating recipe:', req.body);
   if (!title || !ingredients || !instructions || !author_id) {
     return res.status(400).json({ message: 'Title, ingredients, instructions, and author_id are required.' });
   }
+
+  console.log('Author: ', req.user);
 
   try {
     const query = `
@@ -23,10 +81,13 @@ const createRecipe = async (req, res) => {
   }
 };
 
+
+
+
 // Get all recipes
 const getAllRecipes = async (req, res) => {
   try {
-    const { rows } = await db.query('SELECT * FROM recipes');
+    const { rows } = await db.query('SELECT * FROM recipes WHERE status = $1', ['published']);
     res.status(200).json({ recipes: rows });
   } catch (err) {
     console.error('Error fetching recipes:', err.message);
@@ -103,4 +164,13 @@ const deleteRecipe = async (req, res) => {
   }
 };
 
-module.exports = { createRecipe, getAllRecipes, getRecipeById, updateRecipe, deleteRecipe };
+module.exports = { 
+  createRecipe, 
+  getAllRecipes, 
+  getRecipeById, 
+  updateRecipe, 
+  deleteRecipe,
+  approveRecipe,
+  rejectRecipe,
+  getRecipesByStatus
+};
