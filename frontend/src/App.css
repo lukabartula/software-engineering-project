@@ -584,3 +584,23 @@ button:hover {
   background-color: #0056b3;
 }
 
+.add-recipe-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.add-recipe-container form input,
+.add-recipe-container form textarea {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+}
+
+.upload-placeholder {
+  border: 2px dashed #ccc;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 15px;
+  color: #888;
+}

@@ -9,8 +9,9 @@ import Home from './pages/Home';
 import About from './pages/About';
 import Recipes from './pages/Recipes';
 import RecipeDetails from './pages/RecipeDetails';
-
-
+import AdminRoute from './components/Auth/AdminRoute';
+import AdminDashboard from './pages/AdminDashboard';
+import AddRecipe from './pages/AddRecipe';
 
 const App = () => {
   return (
@@ -25,7 +26,13 @@ const App = () => {
             <Route path="profile" element={
               <ProtectedRoute><Profile /></ProtectedRoute>
             } />
-            {/* More protected routes like create-recipe will go here */}
+            <Route path="admin" element={
+              <AdminRoute><AdminDashboard /></AdminRoute>
+            } />
+            <Route path="add-recipe" element={
+              <ProtectedRoute><AddRecipe /></ProtectedRoute>
+            } />
+            
           </Route>
 
           <Route path="/login" element={<Login />} />

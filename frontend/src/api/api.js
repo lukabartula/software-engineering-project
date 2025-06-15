@@ -36,6 +36,7 @@ export const getReviews = (recipeId) => API.get(`/reviews/${recipeId}`);
 export const addReview = (recipeId, data) => API.post(`/reviews/${recipeId}`, data);
 export const updateReview = (recipeId, data) => API.put(`/reviews/${recipeId}`, data);
 export const deleteReview = (reviewId) => API.delete(`/reviews/${reviewId}`);
+export const getAverageRating = (recipeId) => API.get(`/reviews/${recipeId}/average`);
 
 // FAVORITE ROUTES
 

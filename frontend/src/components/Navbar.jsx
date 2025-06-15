@@ -24,7 +24,7 @@ const Navbar = () => {
         <Link to="/">HOME</Link>
         <Link to="/recipes">RECIPES</Link>
         <Link to="/about">ABOUT US</Link>
-        {user && <Link to="/create-recipe">CREATE RECIPE</Link>}
+        {user && <Link to="/add-recipe">ADD RECIPE</Link>}
       </div>
 
       <div className="navbar-right">
