@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { getAllRecipes } from '../api/api';  
 import { RecipeCardFactory } from '../components/RecipeCardFactory';
 import '../App.css';
 
@@ -10,7 +10,7 @@ const Recipes = () => {
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/recipes');
+        const response = await getAllRecipes();  
         setRecipes(response.data.recipes);
       } catch (err) {
         console.error(err);

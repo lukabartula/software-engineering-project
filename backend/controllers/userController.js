@@ -140,6 +140,48 @@ const updateUserProfile = async (req, res) => {
   }
 };
 
+// TODO fix
+const updateUserPassword = async (req, res) => {
+  const { id } = req.params;
+  const { userId } = req.user;
+  const { oldPassword, newPassword } = req.body;
+
+  try {
+    if (parseInt(id) !== userId) {
+      return res.status(403).json({ message: 'You are not authorized to update this password.' });
+    }
+
+    // Fetch user's existing hashed password
+    const userResult = await db.query('SELECT password FROM users WHERE id = $1', [userId]);
+
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    const existingHashedPassword = userResult.rows[0].password;
+
+    const isMatch = await bcrypt.compare(oldPassword, existingHashedPassword);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Current password is incorrect.' });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    await db.query('UPDATE users SET password = $1 WHERE id = $2', [hashedPassword, id]);
+
+    res.status(200).json({ message: 'Password updated successfully.' });
+  } catch (err) {
+    console.error('Error updating password:', err.message);
+    res.status(500).json({ message: 'Server error while updating password.' });
+  }
+  console.log("PARAM ID:", id);
+  console.log("Token userId:", userId);
+  console.log("Request body:", req.body);
+};
+
+
+
 // Delete user profile
 const deleteUserProfile = async (req, res) => {
   const { id } = req.params;
@@ -188,5 +230,6 @@ module.exports = {
   getUserProfile, 
   updateUserProfile, 
   deleteUserProfile,
-  getAllUsers
+  getAllUsers,
+  updateUserPassword
 };

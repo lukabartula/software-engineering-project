@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from './AuthContext';
-import axios from 'axios';
+import { loginUser } from '../../api/api'; 
 import '../../App.css';  // Import global styles
 
 const Login = () => {
@@ -15,13 +15,10 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/users/login', {
-        username,
-        password,
-      });
+      const response = await loginUser({ username, password });  // <-- Use centralized function
 
       const { token, user } = response.data;
-      login(user, token);
+      login(token, user);   // <-- order corrected for AuthContext
       navigate('/');
     } catch (err) {
       console.error(err);

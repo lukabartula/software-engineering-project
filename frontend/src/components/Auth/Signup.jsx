@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from './AuthContext';
-import axios from 'axios';
+import { registerUser, loginUser } from '../../api/api';
 import '../.././App.css';
 
 const Signup = () => {
@@ -34,16 +34,16 @@ const Signup = () => {
           : [],
       };
 
-      const response = await axios.post('http://localhost:5000/api/users/register', body);
+      await registerUser(body);  // <-- call centralized register function
 
       // OPTIONAL: Direct login after registration
-      const loginResponse = await axios.post('http://localhost:5000/api/users/login', {
+      const loginResponse = await loginUser({
         username: formData.username,
         password: formData.password,
       });
 
       const { token, user } = loginResponse.data;
-      login(user, token);
+      login(token, user);  // <-- token first, same as AuthContext
       navigate('/');
     } catch (err) {
       console.error(err);

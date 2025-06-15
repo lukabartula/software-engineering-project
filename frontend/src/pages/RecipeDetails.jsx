@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import { getRecipeById } from '../api/api';
+import ReviewSection from '../components/ReviewSection';
 import '../App.css';
 
 const RecipeDetails = () => {
@@ -11,7 +12,7 @@ const RecipeDetails = () => {
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/recipes/${id}`);
+        const response = await getRecipeById(id);
         setRecipe(response.data.recipe);
       } catch (err) {
         console.error(err);
@@ -44,6 +45,11 @@ const RecipeDetails = () => {
       <div className="recipe-section">
         <h3>Instructions:</h3>
         <p>{recipe.instructions}</p>
+      </div>
+
+      <div className="recipe-section">
+        <h3>Reviews:</h3>
+        <ReviewSection recipeId={id} />
       </div>
     </div>
   );
