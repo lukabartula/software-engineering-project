@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getFavorites } from '../api/api';
+import { getFavorites, removeFavorite } from '../api/api';
 import { useNavigate } from 'react-router-dom';
 
 const Favorites = () => {
@@ -23,6 +23,15 @@ const Favorites = () => {
     navigate(`/recipes/${id}`);
   };
 
+  const handleRemoveFavorite = async (id) => {
+    try {
+      await removeFavorite(id);
+      setFavorites(prevFavorites => prevFavorites.filter(recipe => recipe.id !== id));
+    } catch (err) {
+      console.error('Failed to remove favorite:', err);
+    }
+  };
+
   return (
     <div className="favorites-container">
       <h2>My Favorite Recipes</h2>
@@ -31,15 +40,24 @@ const Favorites = () => {
       ) : (
         <div className="favorites-grid">
           {favorites.map(recipe => (
+            console.log(recipe),
             <div 
               key={recipe.id} 
               className="favorite-card"
-              onClick={() => handleRecipeClick(recipe.id)}
               style={{ cursor: 'pointer' }}
             >
-              <h3>{recipe.title}</h3>
-              <img src={recipe.image_url} alt={recipe.title} width="200" />
-              <p>{recipe.description}</p>
+              <div onClick={() => handleRecipeClick(recipe.id)}>
+                <h3>{recipe.title}</h3>
+                <img src={recipe.image_url} alt={recipe.title} width="200" />
+                <p>{recipe.description}</p>
+              </div>
+
+              <button 
+                onClick={() => handleRemoveFavorite(recipe.id)} 
+                className="remove-favorite-button"
+              >
+                Remove ❌
+              </button>
             </div>
           ))}
         </div>
