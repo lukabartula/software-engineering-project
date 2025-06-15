@@ -3,8 +3,8 @@ import { AuthContext } from '../components/Auth/AuthContext';
 import EditProfileModal from '../components/EditProfileModal';
 import ChangePasswordModal from '../components/Auth/ChangePasswordModal';
 import '../App.css';
-import { getUserProfile, deleteUserProfile } from '../api/api';  // <-- central API calls
-import { useNavigate } from 'react-router-dom';  // <-- ADD THIS LINE
+import { getUserProfile, deleteUserProfile } from '../api/api';  
+import { useNavigate } from 'react-router-dom'; 
 
 const Profile = () => {
   const { user, logout } = useContext(AuthContext);
@@ -14,7 +14,7 @@ const Profile = () => {
   const [deleting, setDeleting] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
 
-  const navigate = useNavigate();  // <-- ADD THIS LINE
+  const navigate = useNavigate();  
 
   const fetchProfile = async () => {
     try {
@@ -64,6 +64,11 @@ const Profile = () => {
         <p><strong>Role:</strong> {profile.role}</p>
         <p><strong>Dietary Preferences:</strong> {profile.dietary_preferences.join(', ')}</p>
       </div>
+
+      {/* Favorites button */}
+      <button className="logout-button" onClick={() => navigate('/favorites')}>
+        Favorites
+      </button>
 
       <button className="logout-button" onClick={() => setShowModal(true)}>Edit Profile</button>
       <button className="logout-button" onClick={logout}>Logout</button>
