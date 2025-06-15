@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { getAllRecipes } from '../api/api';  // <-- central API call
 import { RecipeCardFactory } from '../components/RecipeCardFactory';
 import '../App.css';
 
@@ -10,7 +10,7 @@ const Home = () => {
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/recipes');
+        const response = await getAllRecipes();  // <-- central API function
         const allRecipes = response.data.recipes;
 
         // Filter recipes by IDs you want as featured

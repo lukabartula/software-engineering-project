@@ -7,7 +7,8 @@ const {
     getUserProfile,
     updateUserProfile,
     deleteUserProfile,
-    getAllUsers
+    getAllUsers,
+    updateUserPassword
 } = require('../controllers/userController');
 
 // Register route
@@ -20,6 +21,7 @@ router.post('/login', loginUser);
 router.get('/all', verifyToken, getAllUsers);
 
 // Protected routes for user profile management
+router.put('/:id/password', verifyToken, updateUserPassword);
 router.get('/:id', verifyToken, getUserProfile);
 router.put('/:id', verifyToken, updateUserProfile);
 router.delete('/:id', verifyToken, deleteUserProfile);

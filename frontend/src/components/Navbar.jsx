@@ -18,26 +18,25 @@ const Navbar = () => {
         <Link to="/">
           <img src="/logo-no-bg.svg" alt="Dessert Delight" className="navbar-logo-img" />
         </Link>
-        <span>Dessert Delight</span>
       </div>
 
       <div className="navbar-center">
-        <Link to="/">Home</Link>
-        <Link to="/recipes">Recipes</Link>
-        <Link to="/about">About Us</Link>
-        {user && <Link to="/create-recipe">Create Recipe</Link>}
+        <Link to="/">HOME</Link>
+        <Link to="/recipes">RECIPES</Link>
+        <Link to="/about">ABOUT US</Link>
+        {user && <Link to="/create-recipe">CREATE RECIPE</Link>}
       </div>
 
       <div className="navbar-right">
         {user ? (
           <>
-            <Link to="/profile">Profile</Link>
-            <button onClick={handleLogout} className="logout-button">Logout</button>
+            <Link to="/profile">PROFILE</Link>
+            <button onClick={handleLogout} className="logout-button">LOGOUT</button>
           </>
         ) : (
           <>
-            <Link to="/login">Login</Link>
-            <Link to="/register">Register</Link>
+            <Link to="/login">LOOGIN</Link>
+            <Link to="/register">REGISTER</Link>
           </>
         )}
       </div>

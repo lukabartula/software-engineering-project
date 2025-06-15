@@ -1,22 +1,22 @@
 import React, { useEffect, useState, useContext } from 'react';
-import axios from 'axios';
 import { AuthContext } from '../components/Auth/AuthContext';
 import EditProfileModal from '../components/EditProfileModal';
+import ChangePasswordModal from '../components/Auth/ChangePasswordModal';
 import '../App.css';
+import { getUserProfile, deleteUserProfile } from '../api/api';  // <-- central API calls
 
 const Profile = () => {
   const { user, logout } = useContext(AuthContext);
   const [profile, setProfile] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState('');
+  const [deleting, setDeleting] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+
 
   const fetchProfile = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(
-        `http://localhost:5000/api/users/${user.id}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const response = await getUserProfile(user.id);
       setProfile(response.data.user);
     } catch (err) {
       console.error(err);
@@ -30,9 +30,24 @@ const Profile = () => {
     }
   }, [user]);
 
-  if (!profile) {
-    return <p>Loading profile...</p>;
-  }
+  const handleDeleteAccount = async () => {
+    const confirmed = window.confirm('Are you sure you want to delete your account? This action cannot be undone.');
+    if (!confirmed) return;
+
+    try {
+      setDeleting(true);
+      await deleteUserProfile(user.id);
+      alert('Account deleted successfully.');
+      logout();  // logout & clear context
+    } catch (err) {
+      console.error(err);
+      alert('Failed to delete account.');
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  if (!profile) return <p>Loading profile...</p>;
 
   return (
     <div className="profile-container">
@@ -50,6 +65,10 @@ const Profile = () => {
 
       <button className="logout-button" onClick={() => setShowModal(true)}>Edit Profile</button>
       <button className="logout-button" onClick={logout}>Logout</button>
+      <button className="logout-button" onClick={handleDeleteAccount} disabled={deleting}>
+        {deleting ? 'Deleting...' : 'Delete My Account'}
+      </button>
+      <button className="logout-button" onClick={() => setShowPasswordModal(true)}>Change Password</button>     
 
       {showModal && (
         <EditProfileModal
@@ -58,6 +77,14 @@ const Profile = () => {
           refreshProfile={fetchProfile}
         />
       )}
+
+      {showPasswordModal && (
+        <ChangePasswordModal 
+          userId={user.id} 
+          closeModal={() => setShowPasswordModal(false)} 
+        />
+      )}
+
     </div>
   );
 };
