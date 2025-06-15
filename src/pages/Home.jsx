@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { getAllRecipes } from '../api/api';  // <-- central API call
 import { RecipeCardFactory } from '../components/RecipeCardFactory';
 import '../App.css';

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import ReviewForm from "./ReviewForm";
 import { AuthContext } from "./Auth/AuthContext";
 import { getReviews, addReview, deleteReview } from "../api/api";
@@ -6,24 +6,26 @@ import { getReviews, addReview, deleteReview } from "../api/api";
 const ReviewSection = ({ recipeId }) => {
   const { user } = useContext(AuthContext);
   const [reviews, setReviews] = useState([]);
-  const [error, setError] = useState("");
+  const error = useState("");
   const [showForm, setShowForm] = useState(false);
 
+    // Function to fetch reviews
   const fetchReviews = async () => {
     try {
       const response = await getReviews(recipeId);
-      setReviews(response.data.reviews);
-    } catch (err) {
-      console.error(err);
+      setReviews(response.data);
+      const reviewData = response.data;
+      return reviewData;
+    } catch (error) {
+      console.error('Error fetching reviews:', error);
+      setReviews([]);
+      return [];
     }
   };
 
-  useEffect(() => {
-    fetchReviews();
-  }, [recipeId]);
-
+  // Function to handle new review (e.g., after posting a new review)
   const handleNewReview = async (reviewData) => {
-    try {
+     try {
       await addReview(recipeId, reviewData);
       await fetchReviews();
       setShowForm(false);
@@ -32,6 +34,8 @@ const ReviewSection = ({ recipeId }) => {
       alert("Failed to submit review.");
     }
   };
+
+
 
   const handleDeleteReview = async (reviewId) => {
     try {

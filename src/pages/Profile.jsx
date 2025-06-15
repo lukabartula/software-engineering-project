@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { AuthContext } from '../components/Auth/AuthContext';
 import EditProfileModal from '../components/EditProfileModal';
 import ChangePasswordModal from '../components/Auth/ChangePasswordModal';
@@ -26,11 +26,6 @@ const Profile = () => {
     }
   };
 
-  useEffect(() => {
-    if (user) {
-      fetchProfile();
-    }
-  }, [user]);
 
   const handleDeleteAccount = async () => {
     const confirmed = window.confirm('Are you sure you want to delete your account? This action cannot be undone.');

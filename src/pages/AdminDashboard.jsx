@@ -1,9 +1,7 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { AuthContext } from '../components/Auth/AuthContext';
+import React, { useEffect, useState } from 'react';
 import { getRecipesByStatus, approveRecipe, rejectRecipe, getAllUsers, deleteUser } from '../api/api';
 
 const AdminDashboard = () => {
-  const { token } = useContext(AuthContext);
   const [activeTab, setActiveTab] = useState('pending');
   const [recipes, setRecipes] = useState([]);
   const [users, setUsers] = useState([]);

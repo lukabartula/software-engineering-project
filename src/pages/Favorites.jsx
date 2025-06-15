@@ -40,7 +40,7 @@ const Favorites = () => {
       ) : (
         <div className="favorites-grid">
           {favorites.map(recipe => (
-            console.log(recipe),
+            
             <div 
               key={recipe.id} 
               className="favorite-card"
