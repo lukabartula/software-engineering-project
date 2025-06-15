@@ -13,6 +13,19 @@ export const setAuthToken = (token) => {
   }
 };
 
+
+// ADMIN USER ROUTES
+
+export const getAllUsers = () => API.get('/users/all');
+export const deleteUser = (id) => API.delete(`/users/${id}`);
+
+// ADMIN RECIPE ROUTES
+
+export const getRecipesByStatus = (status) => API.get(`/recipes/filter/status?status=${status}`);
+export const approveRecipe = (id) => API.put(`/recipes/${id}/approve`);
+export const rejectRecipe = (id) => API.put(`/recipes/${id}/reject`);
+
+
 // AUTH ROUTES
 
 export const registerUser = (data) => API.post('/users/register', data);
@@ -46,5 +59,3 @@ export const getFavorites = () => API.get('/favorites');
 export const addFavorite = (recipeId) => API.post(`/favorites/${recipeId}`);
 export const removeFavorite = (recipeId) => API.delete(`/favorites/${recipeId}`);
 export const isFavorite = (recipeId) => API.get(`/favorites/${recipeId}/check`);
-
-

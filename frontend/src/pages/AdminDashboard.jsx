@@ -1,32 +1,47 @@
 import React, { useEffect, useState, useContext } from 'react';
-import axios from 'axios';
-import { AuthContext } from '../components/Auth/AuthContext'; 
+import { AuthContext } from '../components/Auth/AuthContext';
+import { getRecipesByStatus, approveRecipe, rejectRecipe, getAllUsers, deleteUser } from '../api/api';
 
 const AdminDashboard = () => {
   const { token } = useContext(AuthContext);
-  const [pendingRecipes, setPendingRecipes] = useState([]);
+  const [activeTab, setActiveTab] = useState('pending');
+  const [recipes, setRecipes] = useState([]);
+  const [users, setUsers] = useState([]);
 
+  // Fetch recipes by status when tab changes
   useEffect(() => {
-    const fetchPending = async () => {
+    const fetchRecipes = async () => {
+      if (activeTab === 'users') return; // skip if in user tab
       try {
-        const response = await axios.get('http://localhost:5000/api/recipes/filter/status?status=pending', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        setPendingRecipes(response.data.recipes);
+        const response = await getRecipesByStatus(activeTab);
+        setRecipes(response.data.recipes);
       } catch (err) {
-        console.error('Error fetching pending recipes:', err);
+        console.error('Error fetching recipes:', err);
       }
     };
 
-    fetchPending();
-  }, [token]);
+    fetchRecipes();
+  }, [activeTab]);
+
+  // Fetch all users
+  useEffect(() => {
+    const fetchUsers = async () => {
+      if (activeTab !== 'users') return;
+      try {
+        const response = await getAllUsers();
+        setUsers(response.data.users);
+      } catch (err) {
+        console.error('Error fetching users:', err);
+      }
+    };
+
+    fetchUsers();
+  }, [activeTab]);
 
   const handleApprove = async (id) => {
     try {
-      await axios.put(`http://localhost:5000/api/recipes/${id}/approve`, {}, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setPendingRecipes(pendingRecipes.filter(recipe => recipe.id !== id));
+      await approveRecipe(id);
+      setRecipes(prev => prev.filter(recipe => recipe.id !== id));
     } catch (err) {
       console.error('Error approving recipe:', err);
     }
@@ -34,30 +49,91 @@ const AdminDashboard = () => {
 
   const handleReject = async (id) => {
     try {
-      await axios.put(`http://localhost:5000/api/recipes/${id}/reject`, {}, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setPendingRecipes(pendingRecipes.filter(recipe => recipe.id !== id));
+      await rejectRecipe(id);
+      setRecipes(prev => prev.filter(recipe => recipe.id !== id));
     } catch (err) {
       console.error('Error rejecting recipe:', err);
     }
   };
 
+  const handleDeleteUser = async (id) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this user?");
+    if (!confirmDelete) return;
+
+    try {
+      await deleteUser(id);
+      setUsers(prev => prev.filter(user => user.id !== id));
+    } catch (err) {
+      console.error('Error deleting user:', err);
+    }
+  };
+
   return (
     <div>
-      <h2>Admin Dashboard - Pending Recipes</h2>
-      {pendingRecipes.length === 0 ? (
-        <p>No pending recipes.</p>
-      ) : (
-        <ul>
-          {pendingRecipes.map(recipe => (
-            <li key={recipe.id}>
-              <h3>{recipe.title}</h3>
-              <button onClick={() => handleApprove(recipe.id)}>Approve</button>
-              <button onClick={() => handleReject(recipe.id)}>Reject</button>
-            </li>
-          ))}
-        </ul>
+      <h2>Admin Dashboard</h2>
+
+      <div className="tabs">
+        <button onClick={() => setActiveTab('pending')} className={activeTab === 'pending' ? 'active' : ''}>Pending Recipes</button>
+        <button onClick={() => setActiveTab('published')} className={activeTab === 'published' ? 'active' : ''}>Published Recipes</button>
+        <button onClick={() => setActiveTab('rejected')} className={activeTab === 'rejected' ? 'active' : ''}>Rejected Recipes</button>
+        <button onClick={() => setActiveTab('users')} className={activeTab === 'users' ? 'active' : ''}>Users</button>
+      </div>
+
+      {/* Recipes Section */}
+      {activeTab !== 'users' && (
+        <div>
+          {recipes.length === 0 ? (
+            <p>No recipes found.</p>
+          ) : (
+            <ul>
+              {recipes.map(recipe => (
+                <li key={recipe.id}>
+                  <h3>{recipe.title}</h3>
+                  {activeTab === 'pending' && (
+                    <>
+                      <button onClick={() => handleApprove(recipe.id)}>Approve</button>
+                      <button onClick={() => handleReject(recipe.id)}>Reject</button>
+                    </>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+
+      {/* Users Section */}
+      {activeTab === 'users' && (
+        <div>
+          {users.length === 0 ? (
+            <p>No users found.</p>
+          ) : (
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Delete</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map(user => (
+                  <tr key={user.id}>
+                    <td>{user.id}</td>
+                    <td>{user.username}</td>
+                    <td>{user.email}</td>
+                    <td>{user.role}</td>
+                    <td>
+                      <button onClick={() => handleDeleteUser(user.id)}>Delete</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
       )}
     </div>
   );
