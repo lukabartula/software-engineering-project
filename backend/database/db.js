@@ -1,16 +1,27 @@
 const { Pool } = require('pg');
 require('dotenv').config();
 
-const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
-});
+let instance = null;
 
-pool.connect()
-  .then(() => console.log('Connected to the database'))
-  .catch((err) => console.error('Error connecting to the database:', err.message));
+class Database {
+  constructor() {
+    if (!instance) {
+      this.pool = new Pool({
+        user: process.env.DB_USER,
+        host: process.env.DB_HOST,
+        database: process.env.DB_NAME,
+        password: process.env.DB_PASSWORD,
+        port: process.env.DB_PORT,
+      });
+      instance = this;
+      console.log('Connected to database.');
+    }
+    return instance;
+  }
 
-module.exports = pool;
+  query(text, params) {
+    return this.pool.query(text, params);
+  }
+}
+
+module.exports = new Database();

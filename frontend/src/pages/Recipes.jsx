@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import RecipeCard from '../components/RecipeCard';
+import { RecipeCardFactory } from '../components/RecipeCardFactory';
 import '../App.css';
 
 const Recipes = () => {
@@ -28,13 +28,13 @@ const Recipes = () => {
 
       <div className="products-grid">
         {recipes.map((recipe) => (
-            <RecipeCard
-                key={recipe.id}
-                id={recipe.id}
-                title={recipe.title}
-                description={recipe.description}
-                image_url={recipe.image_url}
-            />
+          RecipeCardFactory('normal', {
+            key: recipe.id,
+            id: recipe.id,
+            title: recipe.title,
+            description: recipe.description,
+            image_url: recipe.image_url
+          })
         ))}
       </div>
     </div>
