@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: 'https://software-engineering-project-production-4aff.up.railway.app/api',
 });
 
 // Log every request URL and method

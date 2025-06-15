@@ -35,7 +35,7 @@ const AddRecipe = () => {
   console.log("Submitting cleaned data:", dataToSubmit);
 
   try {
-    await axios.post('http://localhost:5000/api/recipes', dataToSubmit, {
+    await axios.post('https://software-engineering-project-production-4aff.up.railway.app/api/recipes', dataToSubmit, {
       headers: { Authorization: `Bearer ${token}` }
     });
     alert("Recipe submitted successfully!");
