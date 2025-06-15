@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useContext } from 'react';
-import ReviewForm from './ReviewForm';
-import { AuthContext } from './Auth/AuthContext';
-import { getReviews, addReview } from '../api/api';
+import React, { useState, useEffect, useContext } from "react";
+import ReviewForm from "./ReviewForm";
+import { AuthContext } from "./Auth/AuthContext";
+import { getReviews, addReview, deleteReview } from "../api/api";
 
 const ReviewSection = ({ recipeId }) => {
   const { user } = useContext(AuthContext);
   const [reviews, setReviews] = useState([]);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [showForm, setShowForm] = useState(false);
 
   const fetchReviews = async () => {
@@ -33,17 +33,37 @@ const ReviewSection = ({ recipeId }) => {
     }
   };
 
+  const handleDeleteReview = async (reviewId) => {
+    try {
+      await deleteReview(reviewId);
+      setReviews(prevReviews => prevReviews.filter(review => review.id !== reviewId));
+    } catch (err) {
+      alert("Failed to delete review.");
+      console.log(err);
+    }
+  };
+
   return (
     <div className="review-section">
       {error && <p className="error-text">{error}</p>}
-      {reviews.length === 0 && <p>No reviews yet. Be the first to write one!</p>}
+      {reviews.length === 0 && (
+        <p>No reviews yet. Be the first to write one!</p>
+      )}
 
-      {reviews.map((review, index) => (
-        <div key={index} className="review-card">
+      {reviews.map((review) => (
+        <div key={review.id} className="review-card">
           <p><strong>{review.username}:</strong></p>
           <p>Rating: {review.rating} ⭐</p>
           <p>{review.review_text}</p>
           <p><small>{new Date(review.created_at).toLocaleDateString()}</small></p>
+          {user && (user.username === review.username || user.role === "admin") && (
+            <button
+              className="delete-review-btn"
+              onClick={() => handleDeleteReview(review.id)}
+            >
+              Delete
+            </button>
+          )}
         </div>
       ))}
 
@@ -52,7 +72,10 @@ const ReviewSection = ({ recipeId }) => {
       )}
 
       {showForm && (
-        <ReviewForm onSubmit={handleNewReview} onCancel={() => setShowForm(false)} />
+        <ReviewForm
+          onSubmit={handleNewReview}
+          onCancel={() => setShowForm(false)}
+        />
       )}
     </div>
   );
