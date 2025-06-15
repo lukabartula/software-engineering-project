@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 const ReviewForm = ({ initialData = {}, onSubmit, onCancel }) => {
   const [rating, setRating] = useState(initialData.rating || 5);
-  const [reviewText, setReviewText] = useState(initialData.reviewText || '');
+  const [review_text, setReviewText] = useState(initialData.review_text || '');
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -10,7 +10,7 @@ const ReviewForm = ({ initialData = {}, onSubmit, onCancel }) => {
       alert("Rating must be between 1 and 5");
       return;
     }
-    onSubmit({ rating, reviewText });
+    onSubmit({ rating, review_text });
   };
 
   return (
@@ -29,7 +29,7 @@ const ReviewForm = ({ initialData = {}, onSubmit, onCancel }) => {
       <div>
         <label>Review:</label>
         <textarea
-          value={reviewText}
+          value={review_text}
           onChange={(e) => setReviewText(e.target.value)}
         />
       </div>

@@ -35,7 +35,7 @@ export const deleteRecipe = (id) => API.delete(`/recipes/${id}`);
 export const getReviews = (recipeId) => API.get(`/reviews/${recipeId}`);
 export const addReview = (recipeId, data) => API.post(`/reviews/${recipeId}`, data);
 export const updateReview = (recipeId, data) => API.put(`/reviews/${recipeId}`, data);
-export const deleteReview = (recipeId) => API.delete(`/reviews/${recipeId}`);
+export const deleteReview = (reviewId) => API.delete(`/reviews/${reviewId}`);
 
 // FAVORITE ROUTES
 
